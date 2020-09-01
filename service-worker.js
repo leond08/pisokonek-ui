@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.ffbbb76d299d4562538eaf656d0e3699.js"
+  "/precache-manifest.087b5c4ae32a972b506945bee08ec71f.js"
 );
 
 self.addEventListener('message', (event) => {
@@ -37,3 +37,31 @@ workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/i
   
   blacklist: [/^\/_/,/\/[^/]+\.[^/]+$/],
 });
+self.addEventListener('push', event => {
+    const data = event.data.text()
+    const title = "PisoKonek"
+    const options = {
+      body: data,
+      title: "PisoKonek",
+      vibrate: [300, 100, 400],
+      requireInteraction: true,
+      image: './assets/img/pisokonek.png',
+      actions: [  
+        {action: 'insert', title: 'Insert coin now'}
+      ]  
+    }
+    event.waitUntil(
+      self.registration.showNotification(title, options)
+    );
+  })
+
+  self.addEventListener('notificationclick', function(event) {  
+    event.notification.close();  
+  
+    if (event.action === 'insert') {  
+      clients.openWindow("/");  
+    }  
+    else {  
+      clients.openWindow("/");  
+    }  
+  }, false);
